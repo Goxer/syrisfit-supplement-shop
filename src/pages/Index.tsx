@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from "react";
 import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
@@ -7,6 +6,8 @@ import AboutSection from "@/components/AboutSection";
 import Newsletter from "@/components/Newsletter";
 import Footer from "@/components/Footer";
 import ProductCard from "@/components/ProductCard";
+import { Button } from "@/components/ui/button";
+import { ShoppingCart } from "lucide-react";
 
 // Sample products data
 const products = [
