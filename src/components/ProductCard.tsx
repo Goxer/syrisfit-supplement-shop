@@ -10,6 +10,7 @@ interface ProductCardProps {
   originalPrice?: number;
   image: string;
   category: string;
+  brand: string;
   isNew?: boolean;
   isBestSeller?: boolean;
 }
@@ -21,6 +22,7 @@ export default function ProductCard({
   originalPrice,
   image,
   category,
+  brand,
   isNew = false,
   isBestSeller = false,
 }: ProductCardProps) {
@@ -66,10 +68,17 @@ export default function ProductCard({
           )}
         </div>
 
+        {/* Brand Badge */}
+        <div className="absolute top-4 right-4">
+          <span className="bg-white/80 backdrop-blur-sm text-gray-800 text-xs font-bold px-2 py-1 rounded-md">
+            {brand}
+          </span>
+        </div>
+
         {/* Favorite Button */}
         <button
           onClick={() => setIsFavorite(!isFavorite)}
-          className="absolute top-4 right-4 bg-white/80 backdrop-blur-sm rounded-full p-2 transition-all duration-300 hover:bg-white"
+          className="absolute bottom-4 right-4 bg-white/80 backdrop-blur-sm rounded-full p-2 transition-all duration-300 hover:bg-white"
         >
           <Heart
             size={18}

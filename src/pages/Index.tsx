@@ -12,36 +12,40 @@ import ProductCard from "@/components/ProductCard";
 const products = [
   {
     id: 1,
-    name: "Proteína Premium Whey Isolate - Chocolate",
+    name: "Proteína Nitro-Tech 100% Whey Gold - Chocolate",
     price: 29500,
     originalPrice: 32900,
     image: "https://images.unsplash.com/photo-1594498653385-d5172c532c00?auto=format&fit=crop&q=80",
     category: "Proteínas",
+    brand: "Muscletech",
     isNew: true,
     isBestSeller: true
   },
   {
     id: 2,
-    name: "Pre-Entreno Matrix Energy Boost - Fruit Punch",
+    name: "Pre-Entreno C4 Original - Fruit Punch",
     price: 22500,
     image: "https://images.unsplash.com/photo-1621607152860-976d7398e4eb?auto=format&fit=crop&q=80",
     category: "Pre-Entreno",
+    brand: "Cellucor",
     isBestSeller: true
   },
   {
     id: 3,
-    name: "Quemador Termogénico Costa Rica Fire",
+    name: "Quemador Hydroxycut Elite - 100 caps",
     price: 24900,
     originalPrice: 27900,
     image: "https://images.unsplash.com/photo-1512069772995-ec65ed49cc79?auto=format&fit=crop&q=80",
-    category: "Quemadores"
+    category: "Quemadores",
+    brand: "Muscletech"
   },
   {
     id: 4,
-    name: "Multivitamínico Daily Essentials - 60 Cápsulas",
+    name: "Hi-Performance Protein - Vanilla",
     price: 18900,
     image: "https://images.unsplash.com/photo-1471864190281-a93a3070b6de?auto=format&fit=crop&q=80",
-    category: "Vitaminas",
+    category: "Proteínas",
+    brand: "Magnum",
     isNew: true
   }
 ];
@@ -84,7 +88,7 @@ export default function Index() {
             </h2>
             <div className="w-24 h-1 bg-syris-secondary mx-auto mb-6 opacity-0 animate-fade-in-up animate-delay-100"></div>
             <p className="text-lg text-gray-600 max-w-2xl mx-auto opacity-0 animate-fade-in-up animate-delay-200">
-              Descubre nuestros suplementos más vendidos, formulados con ingredientes de la más alta calidad.
+              Las mejores marcas de suplementos del mundo, disponibles en Costa Rica con entrega a todo el país.
             </p>
           </div>
 
@@ -98,6 +102,7 @@ export default function Index() {
                 originalPrice={product.originalPrice}
                 image={product.image}
                 category={product.category}
+                brand={product.brand}
                 isNew={product.isNew}
                 isBestSeller={product.isBestSeller}
               />
