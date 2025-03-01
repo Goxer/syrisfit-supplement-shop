@@ -1,7 +1,8 @@
 
 import { useState, useEffect } from "react";
-import { ShoppingCart, Menu, X } from "lucide-react";
+import { ShoppingCart, Menu, X, User, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Link } from "react-router-dom";
 
 export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -20,47 +21,45 @@ export default function Navbar() {
   return (
     <header 
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 py-4 px-6 md:px-10 ${
-        isScrolled ? "bg-white/90 shadow-md backdrop-blur-md" : "bg-transparent"
+        isScrolled ? "bg-black/90 shadow-md backdrop-blur-md" : "bg-transparent"
       }`}
     >
       <div className="max-w-7xl mx-auto flex items-center justify-between">
-        <a href="/" className="flex items-center">
-          <h1 className={`text-2xl font-bold ${isScrolled ? "text-syris-primary" : "text-white"} text-shadow`}>
+        <Link to="/" className="flex items-center">
+          <h1 className="text-2xl font-bold text-white text-shadow">
             SYRISFIT
           </h1>
-        </a>
+        </Link>
+
+        {/* Search Bar - Desktop */}
+        <div className="hidden md:flex items-center relative max-w-xs w-full mx-4">
+          <input
+            type="text"
+            placeholder="Buscar productos..."
+            className="w-full bg-white/10 border border-white/20 text-white rounded-full py-2 px-4 pl-10 focus:outline-none focus:ring-2 focus:ring-white/30 placeholder-white/60"
+          />
+          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-white/60" />
+        </div>
 
         {/* Desktop Navigation */}
         <nav className="hidden md:flex items-center space-x-8">
-          <a 
-            href="#" 
-            className={`${isScrolled ? "text-syris-primary" : "text-white"} hover:text-syris-secondary transition-all duration-300 font-medium`}
+          <Link 
+            to="/" 
+            className="text-white hover:text-gray-300 transition-all duration-300 font-medium"
           >
             Inicio
-          </a>
+          </Link>
           <a 
-            href="#productos" 
-            className={`${isScrolled ? "text-syris-primary" : "text-white"} hover:text-syris-secondary transition-all duration-300 font-medium`}
+            href="/#productos" 
+            className="text-white hover:text-gray-300 transition-all duration-300 font-medium"
           >
             Productos
           </a>
           <a 
-            href="#categorias" 
-            className={`${isScrolled ? "text-syris-primary" : "text-white"} hover:text-syris-secondary transition-all duration-300 font-medium`}
+            href="/#categorias" 
+            className="text-white hover:text-gray-300 transition-all duration-300 font-medium"
           >
             Categorías
-          </a>
-          <a 
-            href="#nosotros" 
-            className={`${isScrolled ? "text-syris-primary" : "text-white"} hover:text-syris-secondary transition-all duration-300 font-medium`}
-          >
-            Nosotros
-          </a>
-          <a 
-            href="#contacto" 
-            className={`${isScrolled ? "text-syris-primary" : "text-white"} hover:text-syris-secondary transition-all duration-300 font-medium`}
-          >
-            Contacto
           </a>
         </nav>
 
@@ -68,13 +67,22 @@ export default function Navbar() {
           <Button 
             variant="ghost" 
             size="icon" 
-            className={`${isScrolled ? "text-syris-primary" : "text-white"} hover:bg-white/10`}
+            className="text-white hover:bg-white/10"
           >
-            <ShoppingCart className="h-5 w-5" />
+            <User className="h-5 w-5" />
           </Button>
           
           <Button 
-            className="bg-syris-secondary text-white hover:bg-syris-secondary/90 hidden md:inline-flex"
+            variant="ghost" 
+            size="icon" 
+            className="text-white hover:bg-white/10 relative"
+          >
+            <ShoppingCart className="h-5 w-5" />
+            <span className="absolute -top-1 -right-1 bg-white text-black text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">0</span>
+          </Button>
+          
+          <Button 
+            className="bg-white text-black hover:bg-white/90 hidden md:inline-flex"
           >
             Comprar Ahora
           </Button>
@@ -83,7 +91,7 @@ export default function Navbar() {
           <Button
             variant="ghost"
             size="icon"
-            className={`md:hidden ${isScrolled ? "text-syris-primary" : "text-white"}`}
+            className="md:hidden text-white"
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
           >
             {isMobileMenuOpen ? (
@@ -97,43 +105,46 @@ export default function Navbar() {
 
       {/* Mobile Menu */}
       {isMobileMenuOpen && (
-        <div className="absolute top-full left-0 right-0 bg-white shadow-lg p-6 flex flex-col space-y-4 md:hidden animate-fade-in-up">
-          <a 
-            href="#" 
-            className="text-syris-primary hover:text-syris-secondary transition-all duration-300 font-medium"
+        <div className="absolute top-full left-0 right-0 bg-black shadow-lg p-6 flex flex-col space-y-4 md:hidden animate-fade-in-up">
+          {/* Search Bar - Mobile */}
+          <div className="relative mb-4">
+            <input
+              type="text"
+              placeholder="Buscar productos..."
+              className="w-full bg-white/10 border border-white/20 text-white rounded-full py-2 px-4 pl-10 focus:outline-none focus:ring-2 focus:ring-white/30 placeholder-white/60"
+            />
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-white/60" />
+          </div>
+          
+          <Link 
+            to="/" 
+            className="text-white hover:text-gray-300 transition-all duration-300 font-medium"
             onClick={() => setIsMobileMenuOpen(false)}
           >
             Inicio
-          </a>
+          </Link>
           <a 
-            href="#productos" 
-            className="text-syris-primary hover:text-syris-secondary transition-all duration-300 font-medium"
+            href="/#productos" 
+            className="text-white hover:text-gray-300 transition-all duration-300 font-medium"
             onClick={() => setIsMobileMenuOpen(false)}
           >
             Productos
           </a>
           <a 
-            href="#categorias" 
-            className="text-syris-primary hover:text-syris-secondary transition-all duration-300 font-medium"
+            href="/#categorias" 
+            className="text-white hover:text-gray-300 transition-all duration-300 font-medium"
             onClick={() => setIsMobileMenuOpen(false)}
           >
             Categorías
           </a>
           <a 
-            href="#nosotros" 
-            className="text-syris-primary hover:text-syris-secondary transition-all duration-300 font-medium"
+            href="/#nosotros" 
+            className="text-white hover:text-gray-300 transition-all duration-300 font-medium"
             onClick={() => setIsMobileMenuOpen(false)}
           >
             Nosotros
           </a>
-          <a 
-            href="#contacto" 
-            className="text-syris-primary hover:text-syris-secondary transition-all duration-300 font-medium"
-            onClick={() => setIsMobileMenuOpen(false)}
-          >
-            Contacto
-          </a>
-          <Button className="bg-syris-secondary text-white hover:bg-syris-secondary/90 w-full">
+          <Button className="bg-white text-black hover:bg-white/90 w-full">
             Comprar Ahora
           </Button>
         </div>

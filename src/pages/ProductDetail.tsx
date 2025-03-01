@@ -4,15 +4,18 @@ import { useParams, Link } from "react-router-dom";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
-import { ShoppingCart, ArrowLeft, Star, Truck, Clock, Shield } from "lucide-react";
+import { ShoppingCart, ArrowLeft, Star, Truck, Clock, Shield, CreditCard, Check, ChevronDown, Heart, Share2 } from "lucide-react";
 import Newsletter from "@/components/Newsletter";
 import { products } from "@/data/products";
+import { toast } from "sonner";
 
 export default function ProductDetail() {
   const { id } = useParams();
   const [quantity, setQuantity] = useState(1);
   const [activeTab, setActiveTab] = useState("description");
   const [isLoading, setIsLoading] = useState(true);
+  const [selectedPayment, setSelectedPayment] = useState("card");
+  const [showPaymentOptions, setShowPaymentOptions] = useState(false);
 
   useEffect(() => {
     // Simulate loading data
@@ -27,12 +30,19 @@ export default function ProductDetail() {
   const productId = parseInt(id || "1");
   const product = products.find((p) => p.id === productId);
 
+  const handleAddToCart = () => {
+    toast.success(`¡${product?.name} añadido al carrito!`, {
+      description: `Cantidad: ${quantity}`,
+      position: "top-right",
+    });
+  };
+
   if (isLoading) {
     return (
-      <div className="fixed inset-0 bg-white flex items-center justify-center z-50">
+      <div className="fixed inset-0 bg-black flex items-center justify-center z-50">
         <div className="flex flex-col items-center">
-          <h1 className="text-3xl font-bold mb-4 animate-pulse">SYRISFIT</h1>
-          <div className="w-16 h-16 border-4 border-black border-t-transparent rounded-full animate-spin"></div>
+          <h1 className="text-3xl font-bold mb-4 text-white animate-pulse">SYRISFIT</h1>
+          <div className="w-16 h-16 border-4 border-white border-t-transparent rounded-full animate-spin"></div>
         </div>
       </div>
     );
@@ -63,7 +73,7 @@ export default function ProductDetail() {
     <div className="min-h-screen bg-white">
       <Navbar />
 
-      <div className="max-w-7xl mx-auto px-6 py-16">
+      <div className="max-w-7xl mx-auto px-6 py-32">
         {/* Breadcrumb */}
         <div className="mb-8">
           <div className="flex items-center text-sm text-gray-600">
@@ -101,8 +111,8 @@ export default function ProductDetail() {
 
             <h1 className="text-3xl font-bold mb-4">{product.name}</h1>
 
-            <div className="flex items-center mb-4">
-              <div className="flex mr-2">
+            <div className="flex items-center space-x-3 mb-4">
+              <div className="flex">
                 {[...Array(5)].map((_, i) => (
                   <Star 
                     key={i} 
@@ -112,9 +122,11 @@ export default function ProductDetail() {
                 ))}
               </div>
               <span className="text-gray-600 text-sm">{product.rating} estrellas</span>
+              <span className="text-gray-500">|</span>
+              <span className="text-sm text-blue-600 hover:underline cursor-pointer">43 valoraciones</span>
             </div>
 
-            <div className="flex items-center space-x-4 mb-6">
+            <div className="flex items-center space-x-4 mb-2">
               <div>
                 <span className="font-bold text-3xl">₡{product.price.toLocaleString('es-CR')}</span>
                 {product.originalPrice && (
@@ -129,6 +141,10 @@ export default function ProductDetail() {
                 </span>
               )}
             </div>
+            
+            <p className="text-sm text-green-600 mb-6 flex items-center">
+              <Check className="h-4 w-4 mr-1" /> En stock - listo para enviar
+            </p>
 
             <p className="text-gray-700 mb-8">
               La creatina monohidratada 100% pura de Muscletech es el suplemento perfecto para aumentar tu fuerza, potencia 
@@ -162,20 +178,89 @@ export default function ProductDetail() {
             </div>
 
             {/* Add to Cart */}
-            <div className="flex flex-col sm:flex-row gap-4 mb-8">
+            <div className="flex flex-col sm:flex-row gap-4 mb-6">
               <Button 
-                className="bg-black hover:bg-black/90 text-white px-8 py-6 text-lg" 
-                onClick={() => console.log('Added to cart:', product.name, 'Quantity:', quantity)}
+                className="bg-black hover:bg-black/90 text-white px-8 py-6 text-lg w-full" 
+                onClick={handleAddToCart}
               >
                 <ShoppingCart className="mr-2 h-5 w-5" />
                 Agregar al carrito
               </Button>
               <Button 
                 variant="outline" 
-                className="border-black text-black hover:bg-black/5"
+                className="border-black text-black hover:bg-black/5 w-full"
               >
-                Comprar ahora
+                <Heart className="mr-2 h-5 w-5" />
+                Favorito
               </Button>
+              <Button 
+                variant="outline" 
+                className="border-black text-black hover:bg-black/5 sm:w-auto"
+              >
+                <Share2 className="h-5 w-5" />
+              </Button>
+            </div>
+
+            {/* Payment Options */}
+            <div className="border border-gray-200 rounded-lg p-4 mb-6">
+              <div 
+                className="flex justify-between items-center cursor-pointer"
+                onClick={() => setShowPaymentOptions(!showPaymentOptions)}
+              >
+                <div className="flex items-center">
+                  <CreditCard className="mr-3 h-5 w-5 text-black" />
+                  <h3 className="font-medium">Opciones de pago</h3>
+                </div>
+                <ChevronDown className={`h-5 w-5 transition-transform ${showPaymentOptions ? "rotate-180" : ""}`} />
+              </div>
+              
+              {showPaymentOptions && (
+                <div className="mt-4 space-y-3">
+                  <div 
+                    className={`border rounded-md p-3 flex items-center cursor-pointer ${selectedPayment === "card" ? "border-black bg-gray-50" : "border-gray-200"}`}
+                    onClick={() => setSelectedPayment("card")}
+                  >
+                    <div className={`w-4 h-4 rounded-full border mr-3 flex items-center justify-center ${selectedPayment === "card" ? "border-black" : "border-gray-300"}`}>
+                      {selectedPayment === "card" && <div className="w-2 h-2 rounded-full bg-black"></div>}
+                    </div>
+                    <div className="flex-1">
+                      <p className="font-medium">Tarjeta de crédito/débito</p>
+                      <div className="flex space-x-2 mt-1">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Mastercard-logo.svg/800px-Mastercard-logo.svg.png" alt="Mastercard" className="h-6" />
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Visa_Inc._logo.svg/2560px-Visa_Inc._logo.svg.png" alt="Visa" className="h-6" />
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/fa/American_Express_logo_%282018%29.svg/1200px-American_Express_logo_%282018%29.svg.png" alt="Amex" className="h-6" />
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div 
+                    className={`border rounded-md p-3 flex items-center cursor-pointer ${selectedPayment === "paypal" ? "border-black bg-gray-50" : "border-gray-200"}`}
+                    onClick={() => setSelectedPayment("paypal")}
+                  >
+                    <div className={`w-4 h-4 rounded-full border mr-3 flex items-center justify-center ${selectedPayment === "paypal" ? "border-black" : "border-gray-300"}`}>
+                      {selectedPayment === "paypal" && <div className="w-2 h-2 rounded-full bg-black"></div>}
+                    </div>
+                    <div className="flex-1">
+                      <p className="font-medium">PayPal</p>
+                      <p className="text-sm text-gray-500">Paga de forma segura con tu cuenta de PayPal</p>
+                    </div>
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b5/PayPal.svg/1200px-PayPal.svg.png" alt="PayPal" className="h-6" />
+                  </div>
+                  
+                  <div 
+                    className={`border rounded-md p-3 flex items-center cursor-pointer ${selectedPayment === "transfer" ? "border-black bg-gray-50" : "border-gray-200"}`}
+                    onClick={() => setSelectedPayment("transfer")}
+                  >
+                    <div className={`w-4 h-4 rounded-full border mr-3 flex items-center justify-center ${selectedPayment === "transfer" ? "border-black" : "border-gray-300"}`}>
+                      {selectedPayment === "transfer" && <div className="w-2 h-2 rounded-full bg-black"></div>}
+                    </div>
+                    <div>
+                      <p className="font-medium">Transferencia bancaria</p>
+                      <p className="text-sm text-gray-500">Recibe los datos de nuestra cuenta por correo</p>
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
 
             {/* Shipping Info */}
