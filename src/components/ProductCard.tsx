@@ -1,5 +1,6 @@
 
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { ShoppingCart, Heart, Eye, Star } from "lucide-react";
 
@@ -38,18 +39,18 @@ export default function ProductCard({
   return (
     <div 
       className={`group bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300 ${
-        featured ? "border-2 border-syris-secondary" : ""
+        featured ? "border-2 border-black" : "border border-gray-100"
       }`}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
-      <div className="relative overflow-hidden">
+      <Link to={`/product/${id}`} className="block relative overflow-hidden">
         {/* Product Image */}
-        <div className="h-60 overflow-hidden">
+        <div className="h-60 overflow-hidden bg-gray-50">
           <img
             src={image}
             alt={name}
-            className={`w-full h-full object-cover transform transition-transform duration-700 ${
+            className={`w-full h-full object-contain p-4 transform transition-transform duration-700 ${
               isHovered ? "scale-110" : "scale-100"
             }`}
           />
@@ -58,22 +59,22 @@ export default function ProductCard({
         {/* Labels */}
         <div className="absolute top-4 left-4 flex flex-col gap-2">
           {isNew && (
-            <span className="bg-syris-secondary text-white text-xs font-semibold px-2 py-1 rounded-md">
+            <span className="bg-black text-white text-xs font-semibold px-2.5 py-1 rounded-md">
               NUEVO
             </span>
           )}
           {isBestSeller && (
-            <span className="bg-syris-accent text-white text-xs font-semibold px-2 py-1 rounded-md">
+            <span className="bg-gray-800 text-white text-xs font-semibold px-2.5 py-1 rounded-md">
               POPULAR
             </span>
           )}
           {featured && (
-            <span className="bg-purple-500 text-white text-xs font-semibold px-2 py-1 rounded-md">
+            <span className="bg-black text-white text-xs font-semibold px-2.5 py-1 rounded-md">
               DESTACADO
             </span>
           )}
           {discount > 0 && (
-            <span className="bg-red-500 text-white text-xs font-semibold px-2 py-1 rounded-md">
+            <span className="bg-gray-900 text-white text-xs font-semibold px-2.5 py-1 rounded-md">
               -{discount}%
             </span>
           )}
@@ -89,52 +90,36 @@ export default function ProductCard({
         {/* Rating */}
         <div className="absolute bottom-4 left-4 bg-white/80 backdrop-blur-sm rounded-md px-2 py-1">
           <div className="flex items-center">
-            <Star size={14} className="text-yellow-500 fill-yellow-500" />
+            <Star size={14} className="text-black fill-black" />
             <span className="text-xs font-semibold ml-1">{rating}</span>
           </div>
         </div>
 
         {/* Favorite Button */}
         <button
-          onClick={() => setIsFavorite(!isFavorite)}
+          onClick={(e) => {
+            e.preventDefault();
+            setIsFavorite(!isFavorite);
+          }}
           className="absolute bottom-4 right-4 bg-white/80 backdrop-blur-sm rounded-full p-2 transition-all duration-300 hover:bg-white"
         >
           <Heart
             size={18}
             className={`${
-              isFavorite ? "fill-red-500 text-red-500" : "text-gray-500"
+              isFavorite ? "fill-black text-black" : "text-gray-500"
             } transition-colors duration-300`}
           />
         </button>
-
-        {/* Quick Action Buttons (Appear on Hover) */}
-        <div 
-          className={`absolute bottom-0 left-0 right-0 bg-syris-primary/90 transition-all duration-300 transform ${
-            isHovered ? "translate-y-0 opacity-100" : "translate-y-full opacity-0"
-          }`}
-        >
-          <div className="flex">
-            <Button 
-              className="w-3/4 rounded-none h-12 bg-transparent hover:bg-syris-primary/80 text-white border-none"
-            >
-              <ShoppingCart className="mr-2 h-5 w-5" />
-              Agregar al carrito
-            </Button>
-            <Button 
-              className="w-1/4 rounded-none h-12 bg-transparent hover:bg-syris-primary/80 text-white border-none border-l border-white/20"
-            >
-              <Eye className="h-5 w-5" />
-            </Button>
-          </div>
-        </div>
-      </div>
+      </Link>
 
       {/* Product Info */}
       <div className="p-4">
         <div className="mb-2">
           <span className="text-xs text-gray-500 font-medium">{category}</span>
         </div>
-        <h3 className="font-medium text-lg mb-1 line-clamp-2">{name}</h3>
+        <Link to={`/product/${id}`}>
+          <h3 className="font-medium text-lg mb-1 line-clamp-2 hover:text-gray-700 transition-colors">{name}</h3>
+        </Link>
         <div className="flex items-center space-x-2">
           <span className="font-bold text-lg">₡{price.toLocaleString('es-CR')}</span>
           {originalPrice && (
@@ -142,6 +127,31 @@ export default function ProductCard({
               ₡{originalPrice.toLocaleString('es-CR')}
             </span>
           )}
+        </div>
+
+        {/* Quick Action Buttons */}
+        <div className="mt-4 grid grid-cols-2 gap-2">
+          <Button 
+            className="w-full rounded-md bg-black hover:bg-black/90 text-white"
+            onClick={(e) => {
+              e.preventDefault();
+              console.log(`Added ${name} to cart`);
+            }}
+          >
+            <ShoppingCart className="mr-2 h-4 w-4" />
+            Comprar
+          </Button>
+          <Button 
+            variant="outline"
+            className="w-full rounded-md border-gray-200 text-gray-700 hover:bg-gray-50"
+            onClick={(e) => {
+              e.preventDefault();
+              console.log(`View ${name} details`);
+            }}
+          >
+            <Eye className="mr-2 h-4 w-4" />
+            Ver
+          </Button>
         </div>
       </div>
     </div>
