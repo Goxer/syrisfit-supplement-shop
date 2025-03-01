@@ -1,7 +1,7 @@
 
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { ShoppingCart, Heart } from "lucide-react";
+import { ShoppingCart, Heart, Eye, Star } from "lucide-react";
 
 interface ProductCardProps {
   id: number;
@@ -13,6 +13,8 @@ interface ProductCardProps {
   brand: string;
   isNew?: boolean;
   isBestSeller?: boolean;
+  rating?: number;
+  featured?: boolean;
 }
 
 export default function ProductCard({
@@ -25,6 +27,8 @@ export default function ProductCard({
   brand,
   isNew = false,
   isBestSeller = false,
+  rating = 4.5,
+  featured = false,
 }: ProductCardProps) {
   const [isHovered, setIsHovered] = useState(false);
   const [isFavorite, setIsFavorite] = useState(false);
@@ -33,7 +37,9 @@ export default function ProductCard({
 
   return (
     <div 
-      className="group bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300"
+      className={`group bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300 ${
+        featured ? "border-2 border-syris-secondary" : ""
+      }`}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
@@ -61,6 +67,11 @@ export default function ProductCard({
               POPULAR
             </span>
           )}
+          {featured && (
+            <span className="bg-purple-500 text-white text-xs font-semibold px-2 py-1 rounded-md">
+              DESTACADO
+            </span>
+          )}
           {discount > 0 && (
             <span className="bg-red-500 text-white text-xs font-semibold px-2 py-1 rounded-md">
               -{discount}%
@@ -73,6 +84,14 @@ export default function ProductCard({
           <span className="bg-white/80 backdrop-blur-sm text-gray-800 text-xs font-bold px-2 py-1 rounded-md">
             {brand}
           </span>
+        </div>
+
+        {/* Rating */}
+        <div className="absolute bottom-4 left-4 bg-white/80 backdrop-blur-sm rounded-md px-2 py-1">
+          <div className="flex items-center">
+            <Star size={14} className="text-yellow-500 fill-yellow-500" />
+            <span className="text-xs font-semibold ml-1">{rating}</span>
+          </div>
         </div>
 
         {/* Favorite Button */}
@@ -88,18 +107,25 @@ export default function ProductCard({
           />
         </button>
 
-        {/* Quick Add Button (Appears on Hover) */}
+        {/* Quick Action Buttons (Appear on Hover) */}
         <div 
           className={`absolute bottom-0 left-0 right-0 bg-syris-primary/90 transition-all duration-300 transform ${
             isHovered ? "translate-y-0 opacity-100" : "translate-y-full opacity-0"
           }`}
         >
-          <Button 
-            className="w-full rounded-none h-12 bg-transparent hover:bg-syris-primary/80 text-white border-none"
-          >
-            <ShoppingCart className="mr-2 h-5 w-5" />
-            Agregar al carrito
-          </Button>
+          <div className="flex">
+            <Button 
+              className="w-3/4 rounded-none h-12 bg-transparent hover:bg-syris-primary/80 text-white border-none"
+            >
+              <ShoppingCart className="mr-2 h-5 w-5" />
+              Agregar al carrito
+            </Button>
+            <Button 
+              className="w-1/4 rounded-none h-12 bg-transparent hover:bg-syris-primary/80 text-white border-none border-l border-white/20"
+            >
+              <Eye className="h-5 w-5" />
+            </Button>
+          </div>
         </div>
       </div>
 
